@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D80175E2C5BD10900C79055 /* DowloadClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D80175D2C5BD10900C79055 /* DowloadClient.swift */; };
+		5D8017602C5BD13100C79055 /* DownloadComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D80175F2C5BD13100C79055 /* DownloadComponent.swift */; };
+		5D8017622C5BD2EA00C79055 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8017612C5BD2EA00C79055 /* CircularProgressView.swift */; };
+		5DD2D6A82C5B5ED600856F6B /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 5DD2D6A72C5B5ED600856F6B /* ComposableArchitecture */; };
 		5DEEE6732C5AC79300506B97 /* BookPlayTCAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEEE6722C5AC79300506B97 /* BookPlayTCAApp.swift */; };
-		5DEEE6752C5AC79300506B97 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEEE6742C5AC79300506B97 /* ContentView.swift */; };
+		5DEEE6752C5AC79300506B97 /* BookPlayMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEEE6742C5AC79300506B97 /* BookPlayMain.swift */; };
 		5DEEE6772C5AC79400506B97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DEEE6762C5AC79400506B97 /* Assets.xcassets */; };
 		5DEEE67A2C5AC79400506B97 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DEEE6792C5AC79400506B97 /* Preview Assets.xcassets */; };
 		5DEEE6842C5AC79400506B97 /* BookPlayTCATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEEE6832C5AC79400506B97 /* BookPlayTCATests.swift */; };
@@ -34,9 +38,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5D80175D2C5BD10900C79055 /* DowloadClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DowloadClient.swift; sourceTree = "<group>"; };
+		5D80175F2C5BD13100C79055 /* DownloadComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadComponent.swift; sourceTree = "<group>"; };
+		5D8017612C5BD2EA00C79055 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		5DEEE66F2C5AC79300506B97 /* BookPlayTCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookPlayTCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DEEE6722C5AC79300506B97 /* BookPlayTCAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayTCAApp.swift; sourceTree = "<group>"; };
-		5DEEE6742C5AC79300506B97 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		5DEEE6742C5AC79300506B97 /* BookPlayMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayMain.swift; sourceTree = "<group>"; };
 		5DEEE6762C5AC79400506B97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5DEEE6792C5AC79400506B97 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5DEEE67F2C5AC79400506B97 /* BookPlayTCATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookPlayTCATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DD2D6A82C5B5ED600856F6B /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +79,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5DD2D6A62C5B5ED600856F6B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5DEEE6662C5AC79300506B97 = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +93,7 @@
 				5DEEE6822C5AC79400506B97 /* BookPlayTCATests */,
 				5DEEE68C2C5AC79500506B97 /* BookPlayTCAUITests */,
 				5DEEE6702C5AC79300506B97 /* Products */,
+				5DD2D6A62C5B5ED600856F6B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,9 +111,12 @@
 			isa = PBXGroup;
 			children = (
 				5DEEE6722C5AC79300506B97 /* BookPlayTCAApp.swift */,
-				5DEEE6742C5AC79300506B97 /* ContentView.swift */,
+				5DEEE6742C5AC79300506B97 /* BookPlayMain.swift */,
 				5DEEE6762C5AC79400506B97 /* Assets.xcassets */,
 				5DEEE6782C5AC79400506B97 /* Preview Content */,
+				5D80175D2C5BD10900C79055 /* DowloadClient.swift */,
+				5D80175F2C5BD13100C79055 /* DownloadComponent.swift */,
+				5D8017612C5BD2EA00C79055 /* CircularProgressView.swift */,
 			);
 			path = BookPlayTCA;
 			sourceTree = "<group>";
@@ -143,6 +162,9 @@
 			dependencies = (
 			);
 			name = BookPlayTCA;
+			packageProductDependencies = (
+				5DD2D6A72C5B5ED600856F6B /* ComposableArchitecture */,
+			);
 			productName = BookPlayTCA;
 			productReference = 5DEEE66F2C5AC79300506B97 /* BookPlayTCA.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +237,9 @@
 				Base,
 			);
 			mainGroup = 5DEEE6662C5AC79300506B97;
+			packageReferences = (
+				5DD2D6A52C5ADE2500856F6B /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			productRefGroup = 5DEEE6702C5AC79300506B97 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -257,7 +282,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5DEEE6752C5AC79300506B97 /* ContentView.swift in Sources */,
+				5DEEE6752C5AC79300506B97 /* BookPlayMain.swift in Sources */,
+				5D8017602C5BD13100C79055 /* DownloadComponent.swift in Sources */,
+				5D80175E2C5BD10900C79055 /* DowloadClient.swift in Sources */,
+				5D8017622C5BD2EA00C79055 /* CircularProgressView.swift in Sources */,
 				5DEEE6732C5AC79300506B97 /* BookPlayTCAApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -582,6 +610,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5DD2D6A52C5ADE2500856F6B /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.12.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5DD2D6A72C5B5ED600856F6B /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DD2D6A52C5ADE2500856F6B /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5DEEE6672C5AC79300506B97 /* Project object */;
 }
