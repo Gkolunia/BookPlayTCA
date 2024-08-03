@@ -25,20 +25,26 @@ struct Metadata: Codable, Equatable {
 struct BookPlayMain {
     
     @ObservableState
-    struct State: Equatable {
+    struct State {
         let metadataUrlString: URL
         var downloadAlert: AlertState<DownloadComponent.Action.Alert>?
         var downloadMode: Mode
-        let id: UUID
         var coverImageUrl: URL?
         var nameBook: String = ""
         var chaptersCount: String = ""
         var chapterName: String = ""
         var keyPoints: [Metadata.Chapter] = []
         var currentUrl: URL?
+        var lyricsText: String = ""
+        var isLyrics: Bool
+        
+        enum Field: String, Hashable {
+          case isLyrics
+        }
     }
     
-    enum Action: Sendable {
+    enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case play
         case screenLoaded
         case downloadMetaData(Result<DownloadClient.Event, Error>)
@@ -47,10 +53,12 @@ struct BookPlayMain {
     @Dependency(\.downloadClient) var downloadClient
     
     var body: some Reducer<State, Action> {
-        
+        BindingReducer()
         Reduce { state, action in
             
             switch action {
+            case .binding:
+                return .none
             case .play:
                 return .none
                 
@@ -80,7 +88,11 @@ struct BookPlayMain {
                     
                     if let intro = metaData.keyPoints.first {
                         state.currentUrl = URL(string: intro.fileUrl)
+                        state.chapterName = intro.title
+                        state.lyricsText = intro.text
                     }
+                    
+                    state.chaptersCount = "KEY POINT 1 OF \(metaData.keyPoints.count)"
                 }
                 catch {
                     state.downloadMode = .downloadingFailed
@@ -106,7 +118,7 @@ struct BookPlayMain {
 
 struct BookPlayMainView: View {
     
-    let store: StoreOf<BookPlayMain>
+    @Bindable var store: StoreOf<BookPlayMain>
     
     var body: some View {
         
@@ -114,18 +126,16 @@ struct BookPlayMainView: View {
         case .downloading(_), .startingToDownload:
             ZStack {
                 ProgressView()
-                Rectangle()
-                    .frame(width: 6, height: 6)
+                    .frame(width: 16, height: 16)
             }
         
         case .notDownloaded:
             ZStack {
                 ProgressView()
+                    .frame(width: 16, height: 16)
                     .onAppear(perform: {
                         store.send(.screenLoaded)
                     })
-                Rectangle()
-                    .frame(width: 6, height: 6)
             }
         
         case .downloadingFailed:
@@ -134,14 +144,45 @@ struct BookPlayMainView: View {
         case .downloaded:
             
             VStack {
-                AsyncImage(url: store.state.coverImageUrl)
-                Text(store.nameBook)
+                if store.isLyrics {
+                    ZStack(content: {
+                        ScrollView {
+                            Text(store.lyricsText)
+                                .font(.system(size: 22))
+                        }
+                        .contentMargins(.all, 20.0, for: .scrollContent)
+                        
+                        VStack(content: {
+                            Rectangle()
+                                .fill(
+                                    LinearGradient(gradient: Gradient(colors: [.white, .clear]), startPoint: .top, endPoint: .bottom)
+                                )
+                                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 50)
+                            Spacer()
+                            Rectangle()
+                                .fill(
+                                    LinearGradient(gradient: Gradient(colors: [.white, .clear]), startPoint: .bottom, endPoint: .top)
+                                )
+                                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 50)
+                        })
+                    })
+                    
+                    
+                    
+                } else {
+                    AsyncImage(url: store.state.coverImageUrl)
+                }
+                
                 Text(store.chaptersCount)
                 Text(store.chapterName)
                 
                 BookPlayerComponentView(store: .init(initialState: .init(currentTrack: createAVItem()), reducer: {
                     BookPlayerComponent()._printChanges()
-                } ))
+                }))
+                
+                ToggleButton(isRightSelected: $store.isLyrics, leftIcon: "headphones", rightIcon: "text.alignleft")
+                
+                
             }
             .padding()
             
@@ -161,5 +202,5 @@ struct BookPlayMainView: View {
 
 #Preview {
     BookPlayMainView(store: .init(initialState: BookPlayMain.State.init(metadataUrlString:  URL.init(string: "https://firebasestorage.googleapis.com/v0/b/test-a6f79.appspot.com/o/book_metadata.json?alt=media&token=cd7ee3b7-cc8e-468c-9bde-5481b8a135f0")!,
-                                                                        downloadMode: .notDownloaded, id: .init()), reducer: {}))
+                                                                        downloadMode: .notDownloaded, isLyrics: .init(false)), reducer: {}))
 }
