@@ -9,16 +9,16 @@ import AVFoundation
 import ComposableArchitecture
 import SwiftUI
 
-struct Metadata: Codable {
-    
-    struct Chapter: Codable {
+struct Metadata: Codable, Equatable {
+    struct Chapter: Codable, Equatable {
         let title: String
-        let audioFileUrl: String
+        let fileUrl: String
+        let text: String
     }
     
     let bookName: String
     let imageUrl: String
-//    let keyPoints: [Chapter]
+    let keyPoints: [Chapter]
 }
 
 @Reducer
@@ -34,12 +34,14 @@ struct BookPlayMain {
         var nameBook: String = ""
         var chaptersCount: String = ""
         var chapterName: String = ""
+        var keyPoints: [Metadata.Chapter] = []
+        var currentUrl: URL?
     }
     
     enum Action: Sendable {
         case play
         case screenLoaded
-        case downloadClient(Result<DownloadClient.Event, Error>)
+        case downloadMetaData(Result<DownloadClient.Event, Error>)
     }
     
     @Dependency(\.downloadClient) var downloadClient
@@ -59,14 +61,14 @@ struct BookPlayMain {
                 
                 return .run { [url = state.metadataUrlString] send in
                     for try await event in self.downloadClient.download(url: url) {
-                        await send(.downloadClient(.success(event)), animation: .default)
+                        await send(.downloadMetaData(.success(event)), animation: .default)
                     }
                 } catch: { error, send in
-                    await send(.downloadClient(.failure(error)), animation: .default)
+                    await send(.downloadMetaData(.failure(error)), animation: .default)
                 }
                 
                 
-            case .downloadClient(.success(.response(let data))):
+            case .downloadMetaData(.success(.response(_, let data))):
                 let decoder = JSONDecoder()
                 do {
                     let metaData = try decoder.decode(Metadata.self, from: data)
@@ -74,20 +76,28 @@ struct BookPlayMain {
                     state.coverImageUrl = URL.init(string: metaData.imageUrl)
                     state.nameBook = metaData.bookName
                     state.downloadMode = .downloaded
+                    state.keyPoints = metaData.keyPoints
+                    
+                    if let intro = metaData.keyPoints.first {
+                        state.currentUrl = URL(string: intro.fileUrl)
+                    }
                 }
                 catch {
                     state.downloadMode = .downloadingFailed
+                    return .none
                 }
                 
+                state.downloadMode = .downloaded
                 return .none
                 
-            case let .downloadClient(.success(.updateProgress(progress))):
+            case let .downloadMetaData(.success(.updateProgress(progress))):
                 state.downloadMode = .downloading(progress: progress)
                 return .none
                 
-            case .downloadClient(.failure):
+            case .downloadMetaData(.failure):
                 state.downloadMode = .downloadingFailed
                 return .none
+
             }
         }
     }
@@ -128,11 +138,22 @@ struct BookPlayMainView: View {
                 Text(store.nameBook)
                 Text(store.chaptersCount)
                 Text(store.chapterName)
+                
+                BookPlayerComponentView(store: .init(initialState: .init(currentTrack: createAVItem()), reducer: {
+                    BookPlayerComponent()._printChanges()
+                } ))
             }
             .padding()
             
             
         }
+    }
+    
+    private func createAVItem() -> AVPlayerItem? {
+        guard let url = store.state.currentUrl else {
+            return nil
+        }
+        return .init(url: url)
     }
 }
 

@@ -14,7 +14,7 @@ struct DownloadClient {
 
   @CasePathable
   enum Event: Equatable {
-    case response(Data)
+    case response(URL, Data)
     case updateProgress(Double)
   }
 }
@@ -44,7 +44,7 @@ extension DownloadClient: DependencyKey {
                 continuation.yield(.updateProgress(Double(progress) / 100))
               }
             }
-            continuation.yield(.response(data))
+            continuation.yield(.response(url, data))
             continuation.finish()
           } catch {
             continuation.finish(throwing: error)
