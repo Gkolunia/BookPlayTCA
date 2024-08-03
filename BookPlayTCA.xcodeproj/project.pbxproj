@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5D0CE7E22C5EB6B90058EB91 /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CE7E12C5EB6B90058EB91 /* ToggleButton.swift */; };
+		5D0CE7E42C5ED97C0058EB91 /* CollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CE7E32C5ED97C0058EB91 /* CollectionExtension.swift */; };
 		5D80175E2C5BD10900C79055 /* DowloadClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D80175D2C5BD10900C79055 /* DowloadClient.swift */; };
 		5D8017602C5BD13100C79055 /* DownloadComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D80175F2C5BD13100C79055 /* DownloadComponent.swift */; };
 		5D8017622C5BD2EA00C79055 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8017612C5BD2EA00C79055 /* CircularProgressView.swift */; };
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		5D0CE7E12C5EB6B90058EB91 /* ToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
+		5D0CE7E32C5ED97C0058EB91 /* CollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtension.swift; sourceTree = "<group>"; };
 		5D80175D2C5BD10900C79055 /* DowloadClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DowloadClient.swift; sourceTree = "<group>"; };
 		5D80175F2C5BD13100C79055 /* DownloadComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadComponent.swift; sourceTree = "<group>"; };
 		5D8017612C5BD2EA00C79055 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				5D8017612C5BD2EA00C79055 /* CircularProgressView.swift */,
 				5D8017632C5CE0C800C79055 /* BookPlayerComponent.swift */,
 				5D0CE7E12C5EB6B90058EB91 /* ToggleButton.swift */,
+				5D0CE7E32C5ED97C0058EB91 /* CollectionExtension.swift */,
 			);
 			path = BookPlayTCA;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				5D0CE7E22C5EB6B90058EB91 /* ToggleButton.swift in Sources */,
 				5D8017602C5BD13100C79055 /* DownloadComponent.swift in Sources */,
 				5D80175E2C5BD10900C79055 /* DowloadClient.swift in Sources */,
+				5D0CE7E42C5ED97C0058EB91 /* CollectionExtension.swift in Sources */,
 				5D8017622C5BD2EA00C79055 /* CircularProgressView.swift in Sources */,
 				5DEEE6732C5AC79300506B97 /* BookPlayTCAApp.swift in Sources */,
 			);

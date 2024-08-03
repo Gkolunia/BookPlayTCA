@@ -56,6 +56,9 @@ struct BookPlayerComponent {
         case changeSpeed
     }
     
+    let nextTrackHandler: () -> ()
+    let previousTrackHandler: () -> ()
+    
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
@@ -74,15 +77,18 @@ struct BookPlayerComponent {
                 state.currentTime = min(state.currentTime + 10, state.totalTime)
                 state.currentTrack?.seek(to: .init(seconds: state.currentTime, preferredTimescale: 2), completionHandler: nil)
                 return .none
-            case .previousTrack:        
-//                state.currentTrackIndex = max(state.currentTrackIndex - 1, 0)
-                state.currentTime = 0
+                
+            case .previousTrack:
+                previousTrackHandler()
+//                state.currentTime = 0
                 return .none
+                
             case .nextTrack:
-//                state.currentTrackIndex = min(state.currentTrackIndex + 1, state.tracks.count - 1)
-                state.currentTime = 0
+                nextTrackHandler()
+//                state.currentTime = 0
                 return .none
-            case .toggleCoverLyrics:        
+                
+            case .toggleCoverLyrics:
                 state.showLyrics.toggle()
                 return .none
             case .totalTime(let duration):
@@ -118,11 +124,6 @@ struct BookPlayerComponentView: View {
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
-//                if viewStore.showLyrics {
-//                    Text("Lyrics view")
-//                } else {
-//                    Text("Cover view")
-//                }
                 HStack(content: {
                     Text(viewStore.currentTimeString)
                     Slider(
@@ -185,7 +186,7 @@ struct BookPlayerComponentView: View {
                 guard let item = viewStore.currentTrack else {
                     return
                 }
-                self.audioPlayer = AVPlayer(playerItem:item)
+                self.audioPlayer = AVPlayer(playerItem: item)
                 viewStore.send(.loadTrackInfo)
                 
                 let interval = CMTime(value: 1, timescale: 2)
@@ -193,14 +194,6 @@ struct BookPlayerComponentView: View {
                                                                   queue: .main) { time in
                     viewStore.send(.currentTime(time.seconds))
                 }
-                
-//                do {
-//                    self.audioPlayer = AVPlayer(playerItem:playerItem)
-//                      viewStore.totalTime = self.audioPlayer.currentItem?.asset.load
-//                }
-//                catch {
-//                    print(error)
-//                }
             })
             .onReceive(pub) { (output) in
                 viewStore.send(.playPauseTapped)
@@ -209,6 +202,28 @@ struct BookPlayerComponentView: View {
             .onChange(of: store.state.speed) { oldValue, newValue in
                 audioPlayer.rate = Float(newValue)
             }
+            .onChange(of: store.state.currentTrack) { oldValue, newValue in
+                guard let item = newValue else {
+                    return
+                }
+                
+                
+                
+                self.audioPlayer.replaceCurrentItem(with: item)
+                viewStore.send(.loadTrackInfo)
+                
+                guard let observer = timeObserver else {
+                    return
+                }
+                self.audioPlayer.removeTimeObserver(observer)
+                
+                let interval = CMTime(value: 1, timescale: 2)
+                self.timeObserver = audioPlayer.addPeriodicTimeObserver(forInterval: interval,
+                                                                  queue: .main) { time in
+                    viewStore.send(.currentTime(time.seconds))
+                }
+            }
+            
         }
     }
     

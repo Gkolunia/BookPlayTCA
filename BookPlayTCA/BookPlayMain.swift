@@ -30,13 +30,26 @@ struct BookPlayMain {
         var downloadAlert: AlertState<DownloadComponent.Action.Alert>?
         var downloadMode: Mode
         var coverImageUrl: URL?
-        var nameBook: String = ""
-        var chaptersCount: String = ""
-        var chapterName: String = ""
         var keyPoints: [Metadata.Chapter] = []
-        var currentUrl: URL?
-        var lyricsText: String = ""
         var isLyrics: Bool
+        
+        var currentChapter: Metadata.Chapter?
+        
+        var chaptersCount: String  {
+            return "KEY POINT 1 OF \(keyPoints.count)"
+        }
+        var currentUrl: URL? {
+            guard let url = currentChapter?.fileUrl else {
+                return nil
+            }
+            return URL(string: url)
+        }
+        var lyricsText: String {
+            currentChapter?.text ?? ""
+        }
+        var chapterName: String {
+            currentChapter?.title ?? ""
+        }
         
         enum Field: String, Hashable {
           case isLyrics
@@ -48,6 +61,8 @@ struct BookPlayMain {
         case play
         case screenLoaded
         case downloadMetaData(Result<DownloadClient.Event, Error>)
+        case nextChapter
+        case previousChapter
     }
     
     @Dependency(\.downloadClient) var downloadClient
@@ -82,17 +97,9 @@ struct BookPlayMain {
                     let metaData = try decoder.decode(Metadata.self, from: data)
                     
                     state.coverImageUrl = URL.init(string: metaData.imageUrl)
-                    state.nameBook = metaData.bookName
                     state.downloadMode = .downloaded
                     state.keyPoints = metaData.keyPoints
-                    
-                    if let intro = metaData.keyPoints.first {
-                        state.currentUrl = URL(string: intro.fileUrl)
-                        state.chapterName = intro.title
-                        state.lyricsText = intro.text
-                    }
-                    
-                    state.chaptersCount = "KEY POINT 1 OF \(metaData.keyPoints.count)"
+                    state.currentChapter = metaData.keyPoints.first
                 }
                 catch {
                     state.downloadMode = .downloadingFailed
@@ -108,6 +115,24 @@ struct BookPlayMain {
                 
             case .downloadMetaData(.failure):
                 state.downloadMode = .downloadingFailed
+                return .none
+            
+            case .nextChapter:
+                guard let chapter = state.currentChapter else {
+                    state.currentChapter = state.keyPoints.first
+                    return .none
+                }
+                state.currentChapter = state.keyPoints.after(chapter)
+                
+                return .none
+            
+            case .previousChapter:
+                guard let chapter = state.currentChapter else {
+                    state.currentChapter = state.keyPoints.first
+                    return .none
+                }
+                state.currentChapter = state.keyPoints.before(chapter)
+                
                 return .none
 
             }
@@ -166,9 +191,6 @@ struct BookPlayMainView: View {
                                 .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 50)
                         })
                     })
-                    
-                    
-                    
                 } else {
                     AsyncImage(url: store.state.coverImageUrl)
                 }
@@ -177,7 +199,11 @@ struct BookPlayMainView: View {
                 Text(store.chapterName)
                 
                 BookPlayerComponentView(store: .init(initialState: .init(currentTrack: createAVItem()), reducer: {
-                    BookPlayerComponent()._printChanges()
+                    BookPlayerComponent(nextTrackHandler: {
+                        store.send(.nextChapter)
+                    }, previousTrackHandler: {
+                        store.send(.previousChapter)
+                    })._printChanges()
                 }))
                 
                 ToggleButton(isRightSelected: $store.isLyrics, leftIcon: "headphones", rightIcon: "text.alignleft")
