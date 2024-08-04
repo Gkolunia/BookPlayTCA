@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ToggleButton: View {
+struct ToggleButtonView: View {
     
     @Binding var isRightSelected: Bool
     @State var leftIcon: String
@@ -47,5 +47,5 @@ struct ToggleButton: View {
 }
 
 #Preview {
-    ToggleButton(isRightSelected: .constant(false), leftIcon: "headphones", rightIcon: "text.alignleft")
+    ToggleButtonView(isRightSelected: .constant(false), leftIcon: "headphones", rightIcon: "text.alignleft")
 }

@@ -27,8 +27,7 @@ extension DependencyValues {
 }
 
 extension DownloadClient: DependencyKey {
-  static let liveValue = Self(
-    download: { url in
+  static let liveValue = Self(download: { url in
       .init { continuation in
         Task {
           do {

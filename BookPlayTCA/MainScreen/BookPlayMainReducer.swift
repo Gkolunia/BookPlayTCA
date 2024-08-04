@@ -9,20 +9,8 @@ import AVFoundation
 import ComposableArchitecture
 import SwiftUI
 
-struct Metadata: Codable, Equatable {
-    struct Chapter: Codable, Equatable {
-        let title: String
-        let fileUrl: String
-        let text: String
-    }
-    
-    let bookName: String
-    let imageUrl: String
-    let keyPoints: [Chapter]
-}
-
 @Reducer
-struct BookPlayMain {
+struct BookPlayMainReducer {
     
     @ObservableState
     struct State {
@@ -141,92 +129,4 @@ struct BookPlayMain {
     
 }
 
-struct BookPlayMainView: View {
-    
-    @Bindable var store: StoreOf<BookPlayMain>
-    
-    var body: some View {
-        
-        switch store.state.downloadMode {
-        case .downloading(_), .startingToDownload:
-            ZStack {
-                ProgressView()
-                    .frame(width: 16, height: 16)
-            }
-        
-        case .notDownloaded:
-            ZStack {
-                ProgressView()
-                    .frame(width: 16, height: 16)
-                    .onAppear(perform: {
-                        store.send(.screenLoaded)
-                    })
-            }
-        
-        case .downloadingFailed:
-            Text("Error, world!")
-            
-        case .downloaded:
-            
-            VStack {
-                if store.isLyrics {
-                    ZStack(content: {
-                        ScrollView {
-                            Text(store.lyricsText)
-                                .font(.system(size: 22))
-                        }
-                        .contentMargins(.all, 20.0, for: .scrollContent)
-                        
-                        VStack(content: {
-                            Rectangle()
-                                .fill(
-                                    LinearGradient(gradient: Gradient(colors: [.white, .clear]), startPoint: .top, endPoint: .bottom)
-                                )
-                                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 50)
-                            Spacer()
-                            Rectangle()
-                                .fill(
-                                    LinearGradient(gradient: Gradient(colors: [.white, .clear]), startPoint: .bottom, endPoint: .top)
-                                )
-                                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 50)
-                        })
-                    })
-                } else {
-                    AsyncImage(url: store.state.coverImageUrl)
-                }
-                
-                Text(store.chaptersCount)
-                Text(store.chapterName)
-                
-                BookPlayerComponentView(store: .init(initialState: .init(currentTrack: createAVItem()), reducer: {
-                    BookPlayerComponent(nextTrackHandler: {
-                        store.send(.nextChapter)
-                    }, previousTrackHandler: {
-                        store.send(.previousChapter)
-                    })._printChanges()
-                }))
-                
-                ToggleButton(isRightSelected: $store.isLyrics, leftIcon: "headphones", rightIcon: "text.alignleft")
-                
-                
-            }
-            .padding()
-            
-            
-        }
-    }
-    
-    private func createAVItem() -> AVPlayerItem? {
-        guard let url = store.state.currentUrl else {
-            return nil
-        }
-        return .init(url: url)
-    }
-}
 
-
-
-#Preview {
-    BookPlayMainView(store: .init(initialState: BookPlayMain.State.init(metadataUrlString:  URL.init(string: "https://firebasestorage.googleapis.com/v0/b/test-a6f79.appspot.com/o/book_metadata.json?alt=media&token=cd7ee3b7-cc8e-468c-9bde-5481b8a135f0")!,
-                                                                        downloadMode: .notDownloaded, isLyrics: .init(false)), reducer: {}))
-}

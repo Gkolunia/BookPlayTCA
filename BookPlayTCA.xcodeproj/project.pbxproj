@@ -7,15 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5D0CE7E22C5EB6B90058EB91 /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CE7E12C5EB6B90058EB91 /* ToggleButton.swift */; };
+		5D0CE7E22C5EB6B90058EB91 /* ToggleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CE7E12C5EB6B90058EB91 /* ToggleButtonView.swift */; };
 		5D0CE7E42C5ED97C0058EB91 /* CollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CE7E32C5ED97C0058EB91 /* CollectionExtension.swift */; };
+		5D0CE7E82C5FC3F80058EB91 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CE7E72C5FC3F80058EB91 /* Metadata.swift */; };
+		5D0CE7EA2C5FC4370058EB91 /* BookPlayMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CE7E92C5FC4370058EB91 /* BookPlayMainView.swift */; };
+		5D0CE7F02C5FC8250058EB91 /* ScrollWithFadedEdgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CE7EF2C5FC8250058EB91 /* ScrollWithFadedEdgesView.swift */; };
+		5D0CE7F22C5FCB540058EB91 /* BookPlayerComponentReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CE7F12C5FCB540058EB91 /* BookPlayerComponentReducer.swift */; };
 		5D80175E2C5BD10900C79055 /* DowloadClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D80175D2C5BD10900C79055 /* DowloadClient.swift */; };
 		5D8017602C5BD13100C79055 /* DownloadComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D80175F2C5BD13100C79055 /* DownloadComponent.swift */; };
-		5D8017622C5BD2EA00C79055 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8017612C5BD2EA00C79055 /* CircularProgressView.swift */; };
-		5D8017642C5CE0C800C79055 /* BookPlayerComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8017632C5CE0C800C79055 /* BookPlayerComponent.swift */; };
+		5D8017642C5CE0C800C79055 /* BookPlayerComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8017632C5CE0C800C79055 /* BookPlayerComponentView.swift */; };
 		5DD2D6A82C5B5ED600856F6B /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 5DD2D6A72C5B5ED600856F6B /* ComposableArchitecture */; };
 		5DEEE6732C5AC79300506B97 /* BookPlayTCAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEEE6722C5AC79300506B97 /* BookPlayTCAApp.swift */; };
-		5DEEE6752C5AC79300506B97 /* BookPlayMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEEE6742C5AC79300506B97 /* BookPlayMain.swift */; };
+		5DEEE6752C5AC79300506B97 /* BookPlayMainReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEEE6742C5AC79300506B97 /* BookPlayMainReducer.swift */; };
 		5DEEE6772C5AC79400506B97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DEEE6762C5AC79400506B97 /* Assets.xcassets */; };
 		5DEEE67A2C5AC79400506B97 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DEEE6792C5AC79400506B97 /* Preview Assets.xcassets */; };
 		5DEEE6842C5AC79400506B97 /* BookPlayTCATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEEE6832C5AC79400506B97 /* BookPlayTCATests.swift */; };
@@ -41,15 +44,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5D0CE7E12C5EB6B90058EB91 /* ToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
+		5D0CE7E12C5EB6B90058EB91 /* ToggleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleButtonView.swift; sourceTree = "<group>"; };
 		5D0CE7E32C5ED97C0058EB91 /* CollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtension.swift; sourceTree = "<group>"; };
+		5D0CE7E72C5FC3F80058EB91 /* Metadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
+		5D0CE7E92C5FC4370058EB91 /* BookPlayMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayMainView.swift; sourceTree = "<group>"; };
+		5D0CE7EF2C5FC8250058EB91 /* ScrollWithFadedEdgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollWithFadedEdgesView.swift; sourceTree = "<group>"; };
+		5D0CE7F12C5FCB540058EB91 /* BookPlayerComponentReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayerComponentReducer.swift; sourceTree = "<group>"; };
 		5D80175D2C5BD10900C79055 /* DowloadClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DowloadClient.swift; sourceTree = "<group>"; };
 		5D80175F2C5BD13100C79055 /* DownloadComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadComponent.swift; sourceTree = "<group>"; };
-		5D8017612C5BD2EA00C79055 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
-		5D8017632C5CE0C800C79055 /* BookPlayerComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayerComponent.swift; sourceTree = "<group>"; };
+		5D8017632C5CE0C800C79055 /* BookPlayerComponentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayerComponentView.swift; sourceTree = "<group>"; };
 		5DEEE66F2C5AC79300506B97 /* BookPlayTCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookPlayTCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DEEE6722C5AC79300506B97 /* BookPlayTCAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayTCAApp.swift; sourceTree = "<group>"; };
-		5DEEE6742C5AC79300506B97 /* BookPlayMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayMain.swift; sourceTree = "<group>"; };
+		5DEEE6742C5AC79300506B97 /* BookPlayMainReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayMainReducer.swift; sourceTree = "<group>"; };
 		5DEEE6762C5AC79400506B97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5DEEE6792C5AC79400506B97 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5DEEE67F2C5AC79400506B97 /* BookPlayTCATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookPlayTCATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +91,59 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5D0CE7E52C5FC3D90058EB91 /* MainScreen */ = {
+			isa = PBXGroup;
+			children = (
+				5D0CE7E62C5FC3EB0058EB91 /* Model */,
+				5DEEE6742C5AC79300506B97 /* BookPlayMainReducer.swift */,
+				5D0CE7E92C5FC4370058EB91 /* BookPlayMainView.swift */,
+			);
+			path = MainScreen;
+			sourceTree = "<group>";
+		};
+		5D0CE7E62C5FC3EB0058EB91 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5D0CE7E72C5FC3F80058EB91 /* Metadata.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5D0CE7EB2C5FC46B0058EB91 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5D80175F2C5BD13100C79055 /* DownloadComponent.swift */,
+				5D80175D2C5BD10900C79055 /* DowloadClient.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		5D0CE7EC2C5FC47E0058EB91 /* PlayerComponent */ = {
+			isa = PBXGroup;
+			children = (
+				5D8017632C5CE0C800C79055 /* BookPlayerComponentView.swift */,
+				5D0CE7F12C5FCB540058EB91 /* BookPlayerComponentReducer.swift */,
+			);
+			path = PlayerComponent;
+			sourceTree = "<group>";
+		};
+		5D0CE7ED2C5FC4A90058EB91 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5D0CE7E32C5ED97C0058EB91 /* CollectionExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		5D0CE7EE2C5FC5890058EB91 /* UIControls */ = {
+			isa = PBXGroup;
+			children = (
+				5D0CE7E12C5EB6B90058EB91 /* ToggleButtonView.swift */,
+				5D0CE7EF2C5FC8250058EB91 /* ScrollWithFadedEdgesView.swift */,
+			);
+			path = UIControls;
+			sourceTree = "<group>";
+		};
 		5DD2D6A62C5B5ED600856F6B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,15 +176,13 @@
 			isa = PBXGroup;
 			children = (
 				5DEEE6722C5AC79300506B97 /* BookPlayTCAApp.swift */,
-				5DEEE6742C5AC79300506B97 /* BookPlayMain.swift */,
+				5D0CE7E52C5FC3D90058EB91 /* MainScreen */,
+				5D0CE7EC2C5FC47E0058EB91 /* PlayerComponent */,
+				5D0CE7EB2C5FC46B0058EB91 /* Services */,
+				5D0CE7ED2C5FC4A90058EB91 /* Extensions */,
+				5D0CE7EE2C5FC5890058EB91 /* UIControls */,
 				5DEEE6762C5AC79400506B97 /* Assets.xcassets */,
 				5DEEE6782C5AC79400506B97 /* Preview Content */,
-				5D80175D2C5BD10900C79055 /* DowloadClient.swift */,
-				5D80175F2C5BD13100C79055 /* DownloadComponent.swift */,
-				5D8017612C5BD2EA00C79055 /* CircularProgressView.swift */,
-				5D8017632C5CE0C800C79055 /* BookPlayerComponent.swift */,
-				5D0CE7E12C5EB6B90058EB91 /* ToggleButton.swift */,
-				5D0CE7E32C5ED97C0058EB91 /* CollectionExtension.swift */,
 			);
 			path = BookPlayTCA;
 			sourceTree = "<group>";
@@ -291,14 +348,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5DEEE6752C5AC79300506B97 /* BookPlayMain.swift in Sources */,
-				5D8017642C5CE0C800C79055 /* BookPlayerComponent.swift in Sources */,
-				5D0CE7E22C5EB6B90058EB91 /* ToggleButton.swift in Sources */,
+				5D0CE7EA2C5FC4370058EB91 /* BookPlayMainView.swift in Sources */,
+				5D0CE7F22C5FCB540058EB91 /* BookPlayerComponentReducer.swift in Sources */,
+				5DEEE6752C5AC79300506B97 /* BookPlayMainReducer.swift in Sources */,
+				5D8017642C5CE0C800C79055 /* BookPlayerComponentView.swift in Sources */,
+				5D0CE7E22C5EB6B90058EB91 /* ToggleButtonView.swift in Sources */,
 				5D8017602C5BD13100C79055 /* DownloadComponent.swift in Sources */,
 				5D80175E2C5BD10900C79055 /* DowloadClient.swift in Sources */,
 				5D0CE7E42C5ED97C0058EB91 /* CollectionExtension.swift in Sources */,
-				5D8017622C5BD2EA00C79055 /* CircularProgressView.swift in Sources */,
+				5D0CE7E82C5FC3F80058EB91 /* Metadata.swift in Sources */,
 				5DEEE6732C5AC79300506B97 /* BookPlayTCAApp.swift in Sources */,
+				5D0CE7F02C5FC8250058EB91 /* ScrollWithFadedEdgesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

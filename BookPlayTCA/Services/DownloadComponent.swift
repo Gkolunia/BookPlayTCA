@@ -154,8 +154,8 @@ struct DownloadComponentView: View {
                         .tint(.accentColor)
                 } else if viewStore.mode.progress > 0 {
                     ZStack {
-                        CircularProgressView(value: viewStore.mode.progress)
-                            .frame(width: 16, height: 16)
+//                        CircularProgressView(value: viewStore.mode.progress)
+//                            .frame(width: 16, height: 16)
                         Rectangle()
                             .frame(width: 6, height: 6)
                     }
