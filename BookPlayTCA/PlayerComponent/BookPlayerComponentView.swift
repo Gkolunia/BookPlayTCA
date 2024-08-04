@@ -70,34 +70,6 @@ struct BookPlayerComponentView: View {
             .onAppear(perform: {
                 viewStore.send(.viewOnAppear)
             })
-//            .onReceive(pub) { (output) in
-//                viewStore.send(.playPauseTapped)
-//                viewStore.send(.currentTime(0))
-//            }
-//            .onChange(of: store.state.speed) { oldValue, newValue in
-//                audioPlayer.rate = Float(newValue)
-//            }
-//            .onChange(of: store.state.currentTrack) { oldValue, newValue in
-//                guard let item = newValue else {
-//                    return
-//                }
-//                
-//                
-//                
-//                self.audioPlayer.replaceCurrentItem(with: item)
-//                viewStore.send(.loadTrackInfo)
-//                
-//                guard let observer = timeObserver else {
-//                    return
-//                }
-//                self.audioPlayer.removeTimeObserver(observer)
-//                
-//                let interval = CMTime(value: 1, timescale: 2)
-//                self.timeObserver = audioPlayer.addPeriodicTimeObserver(forInterval: interval,
-//                                                                  queue: .main) { time in
-//                    viewStore.send(.currentTime(time.seconds))
-//                }
-//            }
             
         }
     }

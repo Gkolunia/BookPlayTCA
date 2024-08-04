@@ -17,7 +17,7 @@ struct BookPlayMainReducer {
         var downloadMode: Mode
         var coverImageUrl: URL?
         var keyPoints: [Metadata.Chapter] = []
-        var isLyrics: Bool
+        var isLyricsScreenMode: Bool
         
         var currentChapter: Metadata.Chapter?
         var chaptersCount: String { "KEY POINT 1 OF \(keyPoints.count)" }
@@ -44,13 +44,13 @@ struct BookPlayMainReducer {
     
     var body: some Reducer<State, Action> {
         Scope(state: \.playerState, action: \.playerAction) {
-          BookPlayerComponentReducer()
+            BookPlayerComponentReducer()
         }
         Reduce { state, action in
             
             switch action {
             case .changeScreenType:
-                state.isLyrics.toggle()
+                state.isLyricsScreenMode.toggle()
                 return .none
                 
             case .screenLoaded:
@@ -84,16 +84,23 @@ struct BookPlayMainReducer {
                         state.currentChapter = state.keyPoints.first
                         return .none
                     }
-                    state.currentChapter = state.keyPoints.after(chapter)
+                    state.currentChapter = state.keyPoints.after(chapter, loop: true)
                     state.playerState.currentTrack = state.currentUrl
+                    
+                    return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .playFromStart)
+                        .map(Action.playerAction)
+                    
                     
                 case .previousTrack:
                     guard let chapter = state.currentChapter else {
                         state.currentChapter = state.keyPoints.first
                         return .none
                     }
-                    state.currentChapter = state.keyPoints.before(chapter)
+                    state.currentChapter = state.keyPoints.before(chapter, loop: true)
                     state.playerState.currentTrack = state.currentUrl
+                    
+                    return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .playFromStart)
+                        .map(Action.playerAction)
                     
                 default:
                     break

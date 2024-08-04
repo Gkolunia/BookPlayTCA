@@ -39,6 +39,7 @@ struct BookPlayerComponentReducer {
     enum Action: Equatable {
         case viewOnAppear
         case playPauseTapped
+        case playFromStart
         case seek(Double)
         case jumpBackward
         case jumpForward
@@ -60,9 +61,7 @@ struct BookPlayerComponentReducer {
             switch action {
                 
             case .viewOnAppear:
-                guard state.currentTrack != nil else {
-                    return .none
-                }
+                guard state.currentTrack != nil else { return .none }
                 
                 return .run { send in
                     await send(.playPauseTapped)
@@ -77,14 +76,24 @@ struct BookPlayerComponentReducer {
                     return .cancel(id: state.id)
                 }
                 
-                guard let item = state.currentTrack else {
-                    return .none
-                }
-                
+                guard let item = state.currentTrack else { return .none }
                 
                 isUrlAlreadyPlaying(urlTrack: item) ? playerClient.playCurrent() : playerClient.play(url: item)
                 
                 return .run { send in
+                    for await _ in self.clock.timer(interval: .seconds(1)) {
+                        await send(.tick)
+                    }
+                }
+                .cancellable(id: state.id)
+            
+            case .playFromStart:
+                guard let item = state.currentTrack else { return .none }
+                
+                playerClient.play(url: item)
+                
+                return .run { send in
+                    await send(.loadTrackInfo)
                     for await _ in self.clock.timer(interval: .seconds(1)) {
                         await send(.tick)
                     }
@@ -107,6 +116,10 @@ struct BookPlayerComponentReducer {
                 return .none
                 
             case .previousTrack, .nextTrack:
+                if state.isPlaying {
+                    playerClient.pause()
+                    return .cancel(id: state.id)
+                }
                 return .none
                 
             case .toggleCoverLyrics:
@@ -135,6 +148,13 @@ struct BookPlayerComponentReducer {
                 
             case .tick:
                 state.currentTime = playerClient.currentTime
+                if state.currentTime >= state.totalTime {
+                    _ = Effect<BookPlayerComponentReducer.Action>.cancel(id: state.id)
+                    return .run { send in
+                        await send(.nextTrack)
+                    }
+                }
+                
                 return .none
             }
         }
