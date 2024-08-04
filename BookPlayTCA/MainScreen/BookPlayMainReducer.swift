@@ -5,9 +5,8 @@
 //  Created by Mykola Hrybeniuk on 31.07.2024.
 //
 
-import AVFoundation
+import Foundation
 import ComposableArchitecture
-import SwiftUI
 
 @Reducer
 struct BookPlayMainReducer {
@@ -71,7 +70,7 @@ struct BookPlayMainReducer {
                 state.keyPoints = metaData.keyPoints
                 state.currentChapter = metaData.keyPoints.first
                 state.downloadMode = .downloaded
-                state.playerState.currentTrack = self.createAVItem(urlString: state.currentUrl)
+                state.playerState.currentTrack = state.currentUrl
                 return .none
    
             case .downloadMetaData(.failure):
@@ -86,7 +85,7 @@ struct BookPlayMainReducer {
                         return .none
                     }
                     state.currentChapter = state.keyPoints.after(chapter)
-                    state.playerState.currentTrack = self.createAVItem(urlString: state.currentUrl)
+                    state.playerState.currentTrack = state.currentUrl
                     
                 case .previousTrack:
                     guard let chapter = state.currentChapter else {
@@ -94,7 +93,7 @@ struct BookPlayMainReducer {
                         return .none
                     }
                     state.currentChapter = state.keyPoints.before(chapter)
-                    state.playerState.currentTrack = self.createAVItem(urlString: state.currentUrl)
+                    state.playerState.currentTrack = state.currentUrl
                     
                 default:
                     break
@@ -103,13 +102,6 @@ struct BookPlayMainReducer {
                 return .none
             }
         }
-    }
-    
-    private func createAVItem(urlString: URL?) -> AVPlayerItem? {
-        guard let url = urlString else {
-            return nil
-        }
-        return .init(url: url)
     }
     
 }

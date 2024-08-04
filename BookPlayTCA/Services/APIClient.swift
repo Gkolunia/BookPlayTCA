@@ -5,8 +5,8 @@
 //  Created by Mykola Hrybeniuk on 04.08.2024.
 //
 
-import ComposableArchitecture
 import Foundation
+import ComposableArchitecture
 
 @DependencyClient
 struct APIClient {

@@ -7,29 +7,23 @@
 
 import SwiftUI
 import ComposableArchitecture
-import AVFoundation
 
 @Reducer
 struct BookPlayerComponentReducer {
     
     @ObservableState
     struct State: Equatable {
+        let id: AnyHashable
         var currentTime: Double = 0.0
         var speed: Int = 1
-        var totalTime: Double = 300.0
+        var totalTime: Double = 0.0
         var isPlaying: Bool = false
         var showLyrics: Bool = false
         var currentTrackIndex: Int = 0
-        var currentTrack: AVPlayerItem?
+        var currentTrack: URL?
         var isLoadingTrackInfo: Bool = false
-        
-        var totalTimeString: String {
-            format(time: totalTime)
-        }
-        
-        var currentTimeString: String {
-            format(time: currentTime)
-        }
+        var totalTimeString: String { format(time: totalTime) }
+        var currentTimeString: String { format(time: currentTime) }
         
         private func format(time: Double) -> String {
             let formatter = DateComponentsFormatter()
@@ -43,6 +37,7 @@ struct BookPlayerComponentReducer {
     }
     
     enum Action: Equatable {
+        case viewOnAppear
         case playPauseTapped
         case seek(Double)
         case jumpBackward
@@ -54,62 +49,100 @@ struct BookPlayerComponentReducer {
         case currentTime(Double)
         case loadTrackInfo
         case changeSpeed
+        case tick
     }
     
-//    let nextTrackHandler: () -> ()
-//    let previousTrackHandler: () -> ()
+    @Dependency(\.playerClient) var playerClient
+    @Dependency(\.continuousClock) var clock
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+                
+            case .viewOnAppear:
+                guard state.currentTrack != nil else {
+                    return .none
+                }
+                
+                return .run { send in
+                    await send(.playPauseTapped)
+                    await send(.loadTrackInfo)
+                }
+                
             case .playPauseTapped:
                 state.isPlaying.toggle()
-                return .none
+                
+                if !state.isPlaying {
+                    playerClient.pause()
+                    return .cancel(id: state.id)
+                }
+                
+                guard let item = state.currentTrack else {
+                    return .none
+                }
+                
+                
+                isUrlAlreadyPlaying(urlTrack: item) ? playerClient.playCurrent() : playerClient.play(url: item)
+                
+                return .run { send in
+                    for await _ in self.clock.timer(interval: .seconds(1)) {
+                        await send(.tick)
+                    }
+                }
+                .cancellable(id: state.id)
+
             case .seek(let time):
-                state.currentTrack?.seek(to: .init(seconds: time, preferredTimescale: 2), completionHandler: nil)
+                playerClient.setCurrentTime(time: time)
                 state.currentTime = min(max(time, 0), state.totalTime)
                 return .none
+                
             case .jumpBackward:
                 state.currentTime = max(state.currentTime - 5, 0)
-                state.currentTrack?.seek(to: .init(seconds: state.currentTime, preferredTimescale: 2), completionHandler: nil)
+                playerClient.setCurrentTime(time: state.currentTime)
                 return .none
+                
             case .jumpForward:
                 state.currentTime = min(state.currentTime + 10, state.totalTime)
-                state.currentTrack?.seek(to: .init(seconds: state.currentTime, preferredTimescale: 2), completionHandler: nil)
+                playerClient.setCurrentTime(time: state.currentTime)
                 return .none
                 
-            case .previousTrack:
-//                previousTrackHandler()
-//                state.currentTime = 0
-                return .none
-                
-            case .nextTrack:
-//                nextTrackHandler()
-//                state.currentTime = 0
+            case .previousTrack, .nextTrack:
                 return .none
                 
             case .toggleCoverLyrics:
                 state.showLyrics.toggle()
                 return .none
+                
             case .totalTime(let duration):
                 state.totalTime = duration
                 state.isLoadingTrackInfo = false
                 return .none
+                
             case .loadTrackInfo:
                 state.isLoadingTrackInfo = true
-                return .run { [track = state.currentTrack] send in
-                    await send(.totalTime((try? track?.asset.load(.duration).seconds) ?? 0.0))
+                return .run { send in
+                    await send(.totalTime( (try? playerClient.duration()) ?? 0.0 ))
                 }
+                
             case .currentTime(let currentTime):
                 state.currentTime = currentTime
                 return .none
+                
             case .changeSpeed:
                 state.speed = state.speed + 1 > 3 ? 1 : state.speed + 1
+                playerClient.changeSpeed(rate: state.speed)
+                return .none
                 
+            case .tick:
+                state.currentTime = playerClient.currentTime
                 return .none
             }
         }
         
+    }
+    
+    private func isUrlAlreadyPlaying(urlTrack: URL) -> Bool {
+        playerClient.urlOfCurrentlyPlayingInPlayer() == urlTrack
     }
     
 }

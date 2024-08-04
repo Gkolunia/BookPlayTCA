@@ -62,5 +62,5 @@ struct BookPlayMainView: View {
 
 #Preview {
     BookPlayMainView(store: .init(initialState: BookPlayMainReducer.State.init(metadataUrlString: "https://firebasestorage.googleapis.com/v0/b/test-a6f79.appspot.com/o/book_metadata.json?alt=media&token=cd7ee3b7-cc8e-468c-9bde-5481b8a135f0",
-                                                                               downloadMode: .notDownloaded, isLyrics: .init(false), playerState: .init()), reducer: {}))
+                                                                               downloadMode: .notDownloaded, isLyrics: .init(false), playerState: .init(id: UUID())), reducer: {}))
 }
