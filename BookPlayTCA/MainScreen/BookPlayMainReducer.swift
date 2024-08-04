@@ -30,19 +30,23 @@ struct BookPlayMainReducer {
             }
             return URL(string: url)
         }
+        
+        var playerState: BookPlayerComponentReducer.State
     }
     
     enum Action {
         case changeScreenType
         case screenLoaded
         case downloadMetaData(Result<Metadata, Error>)
-        case nextChapter
-        case previousChapter
+        case playerAction(BookPlayerComponentReducer.Action)
     }
     
     @Dependency(\.apiClient) var apiClient
     
     var body: some Reducer<State, Action> {
+        Scope(state: \.playerState, action: \.playerAction) {
+          BookPlayerComponentReducer()
+        }
         Reduce { state, action in
             
             switch action {
@@ -67,30 +71,45 @@ struct BookPlayMainReducer {
                 state.keyPoints = metaData.keyPoints
                 state.currentChapter = metaData.keyPoints.first
                 state.downloadMode = .downloaded
+                state.playerState.currentTrack = self.createAVItem(urlString: state.currentUrl)
                 return .none
    
             case .downloadMetaData(.failure):
                 state.downloadMode = .downloadingFailed
                 return .none
             
-            case .nextChapter:
-                guard let chapter = state.currentChapter else {
-                    state.currentChapter = state.keyPoints.first
-                    return .none
+            case .playerAction(let playerAction):
+                switch playerAction {
+                case .nextTrack:
+                    guard let chapter = state.currentChapter else {
+                        state.currentChapter = state.keyPoints.first
+                        return .none
+                    }
+                    state.currentChapter = state.keyPoints.after(chapter)
+                    state.playerState.currentTrack = self.createAVItem(urlString: state.currentUrl)
+                    
+                case .previousTrack:
+                    guard let chapter = state.currentChapter else {
+                        state.currentChapter = state.keyPoints.first
+                        return .none
+                    }
+                    state.currentChapter = state.keyPoints.before(chapter)
+                    state.playerState.currentTrack = self.createAVItem(urlString: state.currentUrl)
+                    
+                default:
+                    break
                 }
-                state.currentChapter = state.keyPoints.after(chapter)
-                return .none
-            
-            case .previousChapter:
-                guard let chapter = state.currentChapter else {
-                    state.currentChapter = state.keyPoints.first
-                    return .none
-                }
-                state.currentChapter = state.keyPoints.before(chapter)
-                return .none
 
+                return .none
             }
         }
+    }
+    
+    private func createAVItem(urlString: URL?) -> AVPlayerItem? {
+        guard let url = urlString else {
+            return nil
+        }
+        return .init(url: url)
     }
     
 }

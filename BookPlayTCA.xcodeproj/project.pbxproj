@@ -93,8 +93,8 @@
 			isa = PBXGroup;
 			children = (
 				5D0CE7E62C5FC3EB0058EB91 /* Model */,
-				5DEEE6742C5AC79300506B97 /* BookPlayMainReducer.swift */,
 				5D0CE7E92C5FC4370058EB91 /* BookPlayMainView.swift */,
+				5DEEE6742C5AC79300506B97 /* BookPlayMainReducer.swift */,
 			);
 			path = MainScreen;
 			sourceTree = "<group>";

@@ -56,8 +56,8 @@ struct BookPlayerComponentReducer {
         case changeSpeed
     }
     
-    let nextTrackHandler: () -> ()
-    let previousTrackHandler: () -> ()
+//    let nextTrackHandler: () -> ()
+//    let previousTrackHandler: () -> ()
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -79,12 +79,12 @@ struct BookPlayerComponentReducer {
                 return .none
                 
             case .previousTrack:
-                previousTrackHandler()
+//                previousTrackHandler()
 //                state.currentTime = 0
                 return .none
                 
             case .nextTrack:
-                nextTrackHandler()
+//                nextTrackHandler()
 //                state.currentTime = 0
                 return .none
                 

@@ -45,15 +45,8 @@ struct BookPlayMainView: View {
                     
                     Text(viewStore.chaptersCount)
                     Text(viewStore.chapterName)
-                    
-                    BookPlayerComponentView(store: .init(initialState: .init(currentTrack: createAVItem()), reducer: {
-                        BookPlayerComponentReducer(nextTrackHandler: {
-                            store.send(.nextChapter)
-                        }, previousTrackHandler: {
-                            store.send(.previousChapter)
-                        })._printChanges()
-                    }))
-                    
+                
+                    BookPlayerComponentView(store: store.scope(state: \.playerState, action: \.playerAction))
                     ToggleButtonView(isRightSelected: viewStore.binding(
                                         get: \.isLyrics,
                                         send: BookPlayMainReducer.Action.changeScreenType),
@@ -64,16 +57,10 @@ struct BookPlayMainView: View {
             }
         }
     }
-    
-    private func createAVItem() -> AVPlayerItem? {
-        guard let url = store.state.currentUrl else {
-            return nil
-        }
-        return .init(url: url)
-    }
+
 }
 
 #Preview {
     BookPlayMainView(store: .init(initialState: BookPlayMainReducer.State.init(metadataUrlString: "https://firebasestorage.googleapis.com/v0/b/test-a6f79.appspot.com/o/book_metadata.json?alt=media&token=cd7ee3b7-cc8e-468c-9bde-5481b8a135f0",
-                                                                        downloadMode: .notDownloaded, isLyrics: .init(false)), reducer: {}))
+                                                                               downloadMode: .notDownloaded, isLyrics: .init(false), playerState: .init()), reducer: {}))
 }
