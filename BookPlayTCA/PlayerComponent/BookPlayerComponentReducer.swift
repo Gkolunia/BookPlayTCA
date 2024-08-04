@@ -90,6 +90,7 @@ struct BookPlayerComponentReducer {
             case .playFromStart:
                 guard let item = state.currentTrack else { return .none }
                 
+                state.currentTime = 0.0
                 playerClient.play(url: item)
                 
                 return .run { send in
