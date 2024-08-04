@@ -16,8 +16,8 @@ struct BookPlayMainView: View {
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             
-            switch store.state.downloadMode {
-            case .downloading(_), .startingToDownload:
+            switch viewStore.downloadMode {
+            case .downloading, .initialDownloading:
                 ZStack {
                     ProgressView()
                         .frame(width: 16, height: 16)
@@ -28,7 +28,7 @@ struct BookPlayMainView: View {
                     ProgressView()
                         .frame(width: 16, height: 16)
                         .onAppear(perform: {
-                            store.send(.screenLoaded)
+                            viewStore.send(.screenLoaded)
                         })
                 }
                 
@@ -36,16 +36,15 @@ struct BookPlayMainView: View {
                 Text("Error, world!")
                 
             case .downloaded:
-                
                 VStack {
                     if store.isLyrics {
-                        ScrollWithFadedEdgesView(text: store.lyricsText)
+                        ScrollWithFadedEdgesView(text: viewStore.lyricsText)
                     } else {
-                        AsyncImage(url: store.state.coverImageUrl)
+                        AsyncImage(url: viewStore.coverImageUrl)
                     }
                     
-                    Text(store.chaptersCount)
-                    Text(store.chapterName)
+                    Text(viewStore.chaptersCount)
+                    Text(viewStore.chapterName)
                     
                     BookPlayerComponentView(store: .init(initialState: .init(currentTrack: createAVItem()), reducer: {
                         BookPlayerComponentReducer(nextTrackHandler: {
@@ -62,8 +61,6 @@ struct BookPlayMainView: View {
                                      rightIcon: "text.alignleft")
                 }
                 .padding()
-                
-                
             }
         }
     }
@@ -76,9 +73,7 @@ struct BookPlayMainView: View {
     }
 }
 
-
-
 #Preview {
-    BookPlayMainView(store: .init(initialState: BookPlayMainReducer.State.init(metadataUrlString:  URL.init(string: "https://firebasestorage.googleapis.com/v0/b/test-a6f79.appspot.com/o/book_metadata.json?alt=media&token=cd7ee3b7-cc8e-468c-9bde-5481b8a135f0")!,
+    BookPlayMainView(store: .init(initialState: BookPlayMainReducer.State.init(metadataUrlString: "https://firebasestorage.googleapis.com/v0/b/test-a6f79.appspot.com/o/book_metadata.json?alt=media&token=cd7ee3b7-cc8e-468c-9bde-5481b8a135f0",
                                                                         downloadMode: .notDownloaded, isLyrics: .init(false)), reducer: {}))
 }

@@ -14,90 +14,61 @@ struct BookPlayMainReducer {
     
     @ObservableState
     struct State: Equatable {
-        let metadataUrlString: URL
-        var downloadAlert: AlertState<DownloadComponent.Action.Alert>?
+        let metadataUrlString: String
         var downloadMode: Mode
         var coverImageUrl: URL?
         var keyPoints: [Metadata.Chapter] = []
         var isLyrics: Bool
         
         var currentChapter: Metadata.Chapter?
-        
-        var chaptersCount: String  {
-            return "KEY POINT 1 OF \(keyPoints.count)"
-        }
+        var chaptersCount: String { "KEY POINT 1 OF \(keyPoints.count)" }
+        var lyricsText: String { currentChapter?.text ?? "" }
+        var chapterName: String { currentChapter?.title ?? "" }
         var currentUrl: URL? {
             guard let url = currentChapter?.fileUrl else {
                 return nil
             }
             return URL(string: url)
         }
-        var lyricsText: String {
-            currentChapter?.text ?? ""
-        }
-        var chapterName: String {
-            currentChapter?.title ?? ""
-        }
     }
     
     enum Action {
         case changeScreenType
-        case play
         case screenLoaded
-        case downloadMetaData(Result<DownloadClient.Event, Error>)
+        case downloadMetaData(Result<Metadata, Error>)
         case nextChapter
         case previousChapter
     }
     
-    @Dependency(\.downloadClient) var downloadClient
+    @Dependency(\.apiClient) var apiClient
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             
             switch action {
-            case .play:
-                return .none
-                
             case .changeScreenType:
                 state.isLyrics.toggle()
                 return .none
                 
             case .screenLoaded:
-                
                 guard state.downloadMode == .notDownloaded else { return .none }
-                state.downloadMode = .startingToDownload
                 
+                state.downloadMode = .initialDownloading
                 return .run { [url = state.metadataUrlString] send in
-                    for try await event in self.downloadClient.download(url: url) {
-                        await send(.downloadMetaData(.success(event)), animation: .default)
-                    }
+                    let metaData = try await apiClient.bookMetadata(url: url)
+                    await send(.downloadMetaData(.success(metaData)))
                 } catch: { error, send in
-                    await send(.downloadMetaData(.failure(error)), animation: .default)
+                    await send(.downloadMetaData(.failure(error)))
                 }
                 
-                
-            case .downloadMetaData(.success(.response(_, let data))):
-                let decoder = JSONDecoder()
-                do {
-                    let metaData = try decoder.decode(Metadata.self, from: data)
-                    
-                    state.coverImageUrl = URL.init(string: metaData.imageUrl)
-                    state.downloadMode = .downloaded
-                    state.keyPoints = metaData.keyPoints
-                    state.currentChapter = metaData.keyPoints.first
-                }
-                catch {
-                    state.downloadMode = .downloadingFailed
-                    return .none
-                }
-                
+            case .downloadMetaData(.success(let metaData)):
+                state.coverImageUrl = URL.init(string: metaData.imageUrl)
+                state.downloadMode = .downloaded
+                state.keyPoints = metaData.keyPoints
+                state.currentChapter = metaData.keyPoints.first
                 state.downloadMode = .downloaded
                 return .none
-                
-            case let .downloadMetaData(.success(.updateProgress(progress))):
-                state.downloadMode = .downloading(progress: progress)
-                return .none
-                
+   
             case .downloadMetaData(.failure):
                 state.downloadMode = .downloadingFailed
                 return .none
@@ -108,7 +79,6 @@ struct BookPlayMainReducer {
                     return .none
                 }
                 state.currentChapter = state.keyPoints.after(chapter)
-                
                 return .none
             
             case .previousChapter:
@@ -117,7 +87,6 @@ struct BookPlayMainReducer {
                     return .none
                 }
                 state.currentChapter = state.keyPoints.before(chapter)
-                
                 return .none
 
             }
@@ -126,4 +95,10 @@ struct BookPlayMainReducer {
     
 }
 
-
+enum Mode: Equatable {
+    case initialDownloading
+    case downloading
+    case downloaded
+    case notDownloaded
+    case downloadingFailed
+}
