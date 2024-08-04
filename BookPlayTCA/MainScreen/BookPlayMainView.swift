@@ -11,54 +11,60 @@ import SwiftUI
 
 struct BookPlayMainView: View {
     
-    @Bindable var store: StoreOf<BookPlayMainReducer>
+    let store: StoreOf<BookPlayMainReducer>
     
     var body: some View {
-        
-        switch store.state.downloadMode {
-        case .downloading(_), .startingToDownload:
-            ZStack {
-                ProgressView()
-                    .frame(width: 16, height: 16)
-            }
-        
-        case .notDownloaded:
-            ZStack {
-                ProgressView()
-                    .frame(width: 16, height: 16)
-                    .onAppear(perform: {
-                        store.send(.screenLoaded)
-                    })
-            }
-        
-        case .downloadingFailed:
-            Text("Error, world!")
+        WithViewStore(store, observe: { $0 }) { viewStore in
             
-        case .downloaded:
-            
-            VStack {
-                if store.isLyrics {
-                    ScrollWithFadedEdgesView(text: store.lyricsText)
-                } else {
-                    AsyncImage(url: store.state.coverImageUrl)
+            switch store.state.downloadMode {
+            case .downloading(_), .startingToDownload:
+                ZStack {
+                    ProgressView()
+                        .frame(width: 16, height: 16)
                 }
                 
-                Text(store.chaptersCount)
-                Text(store.chapterName)
+            case .notDownloaded:
+                ZStack {
+                    ProgressView()
+                        .frame(width: 16, height: 16)
+                        .onAppear(perform: {
+                            store.send(.screenLoaded)
+                        })
+                }
                 
-                BookPlayerComponentView(store: .init(initialState: .init(currentTrack: createAVItem()), reducer: {
-                    BookPlayerComponentReducer(nextTrackHandler: {
-                        store.send(.nextChapter)
-                    }, previousTrackHandler: {
-                        store.send(.previousChapter)
-                    })._printChanges()
-                }))
+            case .downloadingFailed:
+                Text("Error, world!")
                 
-                ToggleButtonView(isRightSelected: $store.isLyrics, leftIcon: "headphones", rightIcon: "text.alignleft")
+            case .downloaded:
+                
+                VStack {
+                    if store.isLyrics {
+                        ScrollWithFadedEdgesView(text: store.lyricsText)
+                    } else {
+                        AsyncImage(url: store.state.coverImageUrl)
+                    }
+                    
+                    Text(store.chaptersCount)
+                    Text(store.chapterName)
+                    
+                    BookPlayerComponentView(store: .init(initialState: .init(currentTrack: createAVItem()), reducer: {
+                        BookPlayerComponentReducer(nextTrackHandler: {
+                            store.send(.nextChapter)
+                        }, previousTrackHandler: {
+                            store.send(.previousChapter)
+                        })._printChanges()
+                    }))
+                    
+                    ToggleButtonView(isRightSelected: viewStore.binding(
+                                        get: \.isLyrics,
+                                        send: BookPlayMainReducer.Action.changeScreenType),
+                                     leftIcon: "headphones",
+                                     rightIcon: "text.alignleft")
+                }
+                .padding()
+                
+                
             }
-            .padding()
-            
-            
         }
     }
     

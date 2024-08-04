@@ -13,7 +13,7 @@ import SwiftUI
 struct BookPlayMainReducer {
     
     @ObservableState
-    struct State {
+    struct State: Equatable {
         let metadataUrlString: URL
         var downloadAlert: AlertState<DownloadComponent.Action.Alert>?
         var downloadMode: Mode
@@ -38,14 +38,10 @@ struct BookPlayMainReducer {
         var chapterName: String {
             currentChapter?.title ?? ""
         }
-        
-        enum Field: String, Hashable {
-          case isLyrics
-        }
     }
     
-    enum Action: BindableAction {
-        case binding(BindingAction<State>)
+    enum Action {
+        case changeScreenType
         case play
         case screenLoaded
         case downloadMetaData(Result<DownloadClient.Event, Error>)
@@ -56,13 +52,14 @@ struct BookPlayMainReducer {
     @Dependency(\.downloadClient) var downloadClient
     
     var body: some Reducer<State, Action> {
-        BindingReducer()
         Reduce { state, action in
             
             switch action {
-            case .binding:
-                return .none
             case .play:
+                return .none
+                
+            case .changeScreenType:
+                state.isLyrics.toggle()
                 return .none
                 
             case .screenLoaded:
