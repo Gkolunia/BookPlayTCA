@@ -14,13 +14,13 @@ struct BookPlayMainReducer {
     @ObservableState
     struct State: Equatable {
         let metadataUrlString: String
-        var downloadMode: Mode
+        var downloadMode: Mode = .notDownloaded
         var coverImageUrl: URL?
         var keyPoints: [Metadata.Chapter] = []
-        var isLyricsScreenMode: Bool
+        var isLyricsScreenMode: Bool = false
         
         var currentChapter: Metadata.Chapter?
-        var chaptersCount: String { "KEY POINT 1 OF \(keyPoints.count)" }
+        var chaptersCount: String = ""
         var lyricsText: String { currentChapter?.text ?? "" }
         var chapterName: String { currentChapter?.title ?? "" }
         var currentUrl: URL? {
@@ -71,6 +71,7 @@ struct BookPlayMainReducer {
                 state.currentChapter = metaData.keyPoints.first
                 state.downloadMode = .downloaded
                 state.playerState.currentTrack = state.currentUrl
+                state.chaptersCount = "KEY POINT 1 OF \(metaData.keyPoints.count)"
                 return .none
    
             case .downloadMetaData(.failure):
@@ -84,8 +85,18 @@ struct BookPlayMainReducer {
                         state.currentChapter = state.keyPoints.first
                         return .none
                     }
-                    state.currentChapter = state.keyPoints.after(chapter, loop: true)
-                    state.playerState.currentTrack = state.currentUrl
+                    
+                    guard let previous = state.keyPoints.after(chapter) else {
+                        return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .pause)
+                            .map(Action.playerAction)
+                    }
+                    
+//                    let index = state.keyPoints.firstIndex(of: previous) ?? 1
+//                    state.chaptersCount = "KEY POINT \(index) OF \(state.keyPoints.count)"
+//                    state.currentChapter = previous
+//                    state.playerState.currentTrack = state.currentUrl
+                    
+                    self.setState(for: previous, state: &state)
                     
                     return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .playFromStart)
                         .map(Action.playerAction)
@@ -96,9 +107,17 @@ struct BookPlayMainReducer {
                         state.currentChapter = state.keyPoints.first
                         return .none
                     }
-                    state.currentChapter = state.keyPoints.before(chapter, loop: true)
-                    state.playerState.currentTrack = state.currentUrl
+                    guard let next = state.keyPoints.before(chapter) else {
+                        return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .pause)
+                            .map(Action.playerAction)
+                    }
                     
+//                    let index = state.keyPoints.firstIndex(of: next) ?? 1
+//                    state.chaptersCount = "KEY POINT \(index) OF \(state.keyPoints.count)"
+//                    state.currentChapter = next
+//                    state.playerState.currentTrack = state.currentUrl
+                    
+                    self.setState(for: next, state: &state)
                     return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .playFromStart)
                         .map(Action.playerAction)
                     
@@ -109,6 +128,13 @@ struct BookPlayMainReducer {
                 return .none
             }
         }
+    }
+    
+    private func setState(for item: Metadata.Chapter, state: inout State) {
+        let index = state.keyPoints.firstIndex(of: item) ?? 0
+        state.chaptersCount = "KEY POINT \(index + 1) OF \(state.keyPoints.count)"
+        state.currentChapter = item
+        state.playerState.currentTrack = state.currentUrl
     }
     
 }

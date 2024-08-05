@@ -38,7 +38,16 @@ struct BookPlayerComponentView: View {
                 Button(action: {
                     viewStore.send(.changeSpeed)
                 }, label: {
-                    Text("Speed x" + String(viewStore.speed))
+                    ZStack(content: {
+                        Text("Speed x" + String(viewStore.speed))
+                            .padding(.all, 8)
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.black)
+                    })
+                    .background(.gray.opacity(0.3))
+                    .cornerRadius(8)
+                    
+                    
                 })
                 
                 HStack {
@@ -87,5 +96,5 @@ struct BookPlayerComponentView: View {
 
 
 #Preview {
-    BookPlayerComponentView(store: .init(initialState: .init(id: UUID()), reducer: {}))
+    BookPlayerComponentView(store: .init(initialState: .init(), reducer: {}))
 }

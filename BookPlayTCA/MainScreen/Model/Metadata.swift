@@ -23,5 +23,5 @@ struct Metadata: Codable, Equatable {
 // MARK: - Mock data
 
 extension Metadata {
-    static let mock = Self(bookName: "NAME1", imageUrl: "URL", keyPoints: [.init(title: "Title", fileUrl: "ChapterUrl", text: "TextLong")])
+    static let mock = Self(bookName: "NAME", imageUrl: "URL", keyPoints: [.init(title: "Title1", fileUrl: "ChapterUrl1", text: "TextLong1"), .init(title: "Title2", fileUrl: "ChapterUrl2", text: "TextLong2")])
 }

@@ -7,19 +7,18 @@
 
 import SwiftUI
 import ComposableArchitecture
+import XCTestDynamicOverlay
 
 @Reducer
 struct BookPlayerComponentReducer {
     
     @ObservableState
     struct State: Equatable {
-        let id: AnyHashable
+        let id: AnyHashable = UUID()
         var currentTime: Double = 0.0
         var speed: Int = 1
         var totalTime: Double = 0.0
         var isPlaying: Bool = false
-        var showLyrics: Bool = false
-        var currentTrackIndex: Int = 0
         var currentTrack: URL?
         var isLoadingTrackInfo: Bool = false
         var totalTimeString: String { format(time: totalTime) }
@@ -45,12 +44,12 @@ struct BookPlayerComponentReducer {
         case jumpForward
         case previousTrack
         case nextTrack
-        case toggleCoverLyrics
         case totalTime(Double)
         case currentTime(Double)
         case loadTrackInfo
         case changeSpeed
         case tick
+        case pause
     }
     
     @Dependency(\.playerClient) var playerClient
@@ -101,6 +100,11 @@ struct BookPlayerComponentReducer {
                 }
                 .cancellable(id: state.id)
 
+            case .pause:
+                state.isPlaying = false
+                playerClient.pause()
+                return .cancel(id: state.id)
+                
             case .seek(let time):
                 playerClient.setCurrentTime(time: time)
                 state.currentTime = min(max(time, 0), state.totalTime)
@@ -121,10 +125,6 @@ struct BookPlayerComponentReducer {
                     playerClient.pause()
                     return .cancel(id: state.id)
                 }
-                return .none
-                
-            case .toggleCoverLyrics:
-                state.showLyrics.toggle()
                 return .none
                 
             case .totalTime(let duration):

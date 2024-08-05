@@ -40,11 +40,25 @@ struct BookPlayMainView: View {
                     if store.isLyricsScreenMode {
                         ScrollWithFadedEdgesView(text: viewStore.lyricsText)
                     } else {
-                        AsyncImage(url: viewStore.coverImageUrl)
+                        AsyncImage(url: viewStore.coverImageUrl) { result in
+                                    result.image?
+                                        .resizable()
+                                        .scaledToFit()
+                        }
+                        .cornerRadius(16)
                     }
                     
+                    
                     Text(viewStore.chaptersCount)
+                        .foregroundStyle(.gray)
+                        .font(.system(size: 16, weight: .semibold))
+                        .padding(.all, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                     Text(viewStore.chapterName)
+                        .font(.system(size: 14, weight: .semibold))
+                        .multilineTextAlignment(.center)
+                    
+                    
+                    
                 
                     BookPlayerComponentView(store: store.scope(state: \.playerState, action: \.playerAction))
                     ToggleButtonView(isRightSelected: viewStore.binding(
@@ -62,5 +76,5 @@ struct BookPlayMainView: View {
 
 #Preview {
     BookPlayMainView(store: .init(initialState: BookPlayMainReducer.State.init(metadataUrlString: metadataURLString,
-                                                                               downloadMode: .notDownloaded, isLyricsScreenMode: .init(false), playerState: .init(id: UUID())), reducer: {}))
+                                                                               downloadMode: .downloaded, isLyricsScreenMode: .init(false), playerState: .init()), reducer: {}))
 }

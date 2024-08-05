@@ -48,7 +48,7 @@ struct PlayerClient {
 }
 
 extension PlayerClient: TestDependencyKey {
-//  static let previewValue = Self( bookMetadata: { _ in .mock } )
+  static let previewValue = Self()
   static let testValue = Self()
 }
 

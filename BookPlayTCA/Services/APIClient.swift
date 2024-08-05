@@ -15,7 +15,7 @@ struct APIClient {
 
 extension APIClient: TestDependencyKey {
   static let previewValue = Self( bookMetadata: { _ in .mock } )
-  static let testValue = Self()
+  static let testValue = Self( bookMetadata: { _ in .mock } )
 }
 
 extension DependencyValues {

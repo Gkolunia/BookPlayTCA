@@ -16,6 +16,8 @@
 		5D0CE7F42C5FD13F0058EB91 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CE7F32C5FD13F0058EB91 /* APIClient.swift */; };
 		5D0CE7F62C5FEC770058EB91 /* PlayerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CE7F52C5FEC770058EB91 /* PlayerClient.swift */; };
 		5D8017642C5CE0C800C79055 /* BookPlayerComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8017632C5CE0C800C79055 /* BookPlayerComponentView.swift */; };
+		5DA855052C61435F002993BD /* BookPlayMainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA855042C61435F002993BD /* BookPlayMainTests.swift */; };
+		5DA855072C615909002993BD /* BookPlayerComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA855062C615909002993BD /* BookPlayerComponentTests.swift */; };
 		5DD2D6A82C5B5ED600856F6B /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 5DD2D6A72C5B5ED600856F6B /* ComposableArchitecture */; };
 		5DEEE6732C5AC79300506B97 /* BookPlayTCAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEEE6722C5AC79300506B97 /* BookPlayTCAApp.swift */; };
 		5DEEE6752C5AC79300506B97 /* BookPlayMainReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEEE6742C5AC79300506B97 /* BookPlayMainReducer.swift */; };
@@ -53,6 +55,8 @@
 		5D0CE7F32C5FD13F0058EB91 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		5D0CE7F52C5FEC770058EB91 /* PlayerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerClient.swift; sourceTree = "<group>"; };
 		5D8017632C5CE0C800C79055 /* BookPlayerComponentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayerComponentView.swift; sourceTree = "<group>"; };
+		5DA855042C61435F002993BD /* BookPlayMainTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookPlayMainTests.swift; sourceTree = "<group>"; };
+		5DA855062C615909002993BD /* BookPlayerComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayerComponentTests.swift; sourceTree = "<group>"; };
 		5DEEE66F2C5AC79300506B97 /* BookPlayTCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookPlayTCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DEEE6722C5AC79300506B97 /* BookPlayTCAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayTCAApp.swift; sourceTree = "<group>"; };
 		5DEEE6742C5AC79300506B97 /* BookPlayMainReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPlayMainReducer.swift; sourceTree = "<group>"; };
@@ -199,6 +203,8 @@
 			isa = PBXGroup;
 			children = (
 				5DEEE6832C5AC79400506B97 /* BookPlayTCATests.swift */,
+				5DA855042C61435F002993BD /* BookPlayMainTests.swift */,
+				5DA855062C615909002993BD /* BookPlayerComponentTests.swift */,
 			);
 			path = BookPlayTCATests;
 			sourceTree = "<group>";
@@ -367,6 +373,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DEEE6842C5AC79400506B97 /* BookPlayTCATests.swift in Sources */,
+				5DA855072C615909002993BD /* BookPlayerComponentTests.swift in Sources */,
+				5DA855052C61435F002993BD /* BookPlayMainTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
