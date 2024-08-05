@@ -32,10 +32,7 @@ struct BookPlayMainView: View {
                         })
                 }
                 
-            case .downloadingFailed:
-                Text("Error, world!")
-                
-            case .downloaded:
+            case .downloaded, .downloadingFailed:
                 VStack {
                     if store.isLyricsScreenMode {
                         ScrollWithFadedEdgesView(text: viewStore.lyricsText)
@@ -68,8 +65,14 @@ struct BookPlayMainView: View {
                                      rightIcon: "text.alignleft")
                 }
                 .padding()
+                .alert("Book loading is failed", isPresented: .constant(viewStore.downloadMode == .downloadingFailed)) {
+                    Button("Try Again", role: .cancel) {
+                        viewStore.send(.tryLoadBookAgain)
+                    }
+                }
             }
         }
+        
     }
 
 }

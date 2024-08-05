@@ -36,6 +36,7 @@ struct BookPlayMainReducer {
     enum Action {
         case changeScreenType
         case screenLoaded
+        case tryLoadBookAgain
         case downloadMetaData(Result<Metadata, Error>)
         case playerAction(BookPlayerComponentReducer.Action)
     }
@@ -53,8 +54,10 @@ struct BookPlayMainReducer {
                 state.isLyricsScreenMode.toggle()
                 return .none
                 
-            case .screenLoaded:
-                guard state.downloadMode == .notDownloaded else { return .none }
+            case .screenLoaded, .tryLoadBookAgain:
+                guard state.downloadMode == .notDownloaded || state.downloadMode == .downloadingFailed else {
+                    return .none
+                }
                 
                 state.downloadMode = .initialDownloading
                 return .run { [url = state.metadataUrlString] send in
@@ -90,12 +93,7 @@ struct BookPlayMainReducer {
                         return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .pause)
                             .map(Action.playerAction)
                     }
-                    
-//                    let index = state.keyPoints.firstIndex(of: previous) ?? 1
-//                    state.chaptersCount = "KEY POINT \(index) OF \(state.keyPoints.count)"
-//                    state.currentChapter = previous
-//                    state.playerState.currentTrack = state.currentUrl
-                    
+
                     self.setState(for: previous, state: &state)
                     
                     return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .playFromStart)
@@ -111,11 +109,6 @@ struct BookPlayMainReducer {
                         return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .pause)
                             .map(Action.playerAction)
                     }
-                    
-//                    let index = state.keyPoints.firstIndex(of: next) ?? 1
-//                    state.chaptersCount = "KEY POINT \(index) OF \(state.keyPoints.count)"
-//                    state.currentChapter = next
-//                    state.playerState.currentTrack = state.currentUrl
                     
                     self.setState(for: next, state: &state)
                     return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .playFromStart)
