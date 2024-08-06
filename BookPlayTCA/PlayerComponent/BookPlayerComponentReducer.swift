@@ -26,8 +26,9 @@ struct BookPlayerComponentReducer {
         
         private func format(time: Double) -> String {
             let formatter = DateComponentsFormatter()
-            formatter.allowedUnits = [.hour, .minute, .second]
+            formatter.allowedUnits = [.minute, .second]
             formatter.unitsStyle = .positional
+            formatter.zeroFormattingBehavior = .pad
             if let str = formatter.string(from: time) {
                 return str
             }
