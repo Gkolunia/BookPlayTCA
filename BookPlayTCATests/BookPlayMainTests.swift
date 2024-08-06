@@ -64,6 +64,10 @@ final class BookPlayMainTests: XCTestCase {
             $0.chaptersCount = "KEY POINT 2 OF 2"
         }
         
+        await store.receive(\.playerAction.playFromStart) {
+            $0.playerState.isPlaying = true
+        }
+        
         await store.receive(\.playerAction.loadTrackInfo) {
             $0.playerState.isLoadingTrackInfo = true
         }
@@ -75,6 +79,9 @@ final class BookPlayMainTests: XCTestCase {
         await clock.advance(by: .seconds(1))
         await store.receive(\.playerAction.tick)
         await store.receive(\.playerAction.nextTrack)
+        await store.receive(\.playerAction.pause) {
+            $0.playerState.isPlaying = false
+        }
         
         await store.finish()
     }

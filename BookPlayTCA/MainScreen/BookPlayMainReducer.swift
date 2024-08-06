@@ -90,15 +90,11 @@ struct BookPlayMainReducer {
                     }
                     
                     guard let previous = state.keyPoints.after(chapter) else {
-                        return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .pause)
-                            .map(Action.playerAction)
+                        return .send(.playerAction(.pause))
                     }
-
                     self.setState(for: previous, state: &state)
                     
-                    return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .playFromStart)
-                        .map(Action.playerAction)
-                    
+                    return .send(.playerAction(.playFromStart))
                     
                 case .previousTrack:
                     guard let chapter = state.currentChapter else {
@@ -106,13 +102,11 @@ struct BookPlayMainReducer {
                         return .none
                     }
                     guard let next = state.keyPoints.before(chapter) else {
-                        return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .pause)
-                            .map(Action.playerAction)
+                        return .send(.playerAction(.pause))
                     }
                     
                     self.setState(for: next, state: &state)
-                    return BookPlayerComponentReducer().reduce(into: &state.playerState, action: .playFromStart)
-                        .map(Action.playerAction)
+                    return .send(.playerAction(.playFromStart))
                     
                 default:
                     break
